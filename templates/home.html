@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - 赣南师范大学{% endblock %}
+
+{% block content %}
+
+{# Hero Section - Refined #}
+{# Changed overall background to a subtle grey #}
+<div class="relative overflow-hidden" style="background-image: url('/media/IMG_8192.PNG'); background-size: cover; background-position: center; min-height: 100vh;">
+    <!-- Overlay for better text readability -->
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div class="relative z-10 flex items-center justify-center min-h-screen">
+        <div class="text-center px-4 py-16 max-w-3xl mx-auto pt-8">
+            <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-extrabold text-white drop-shadow-lg" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.7);">
+                <span class="block xl:inline">Welcome to</span>
+                <span class="block xl:inline"> 赣南师范</span>
+                <span class="block text-blue-400 font-extrabold xl:inline">大学</span>
+            </h1>
+            <p class="mt-6 text-lg sm:text-xl md:text-2xl text-gray-200 drop-shadow-lg" style="text-shadow: 1px 1px 6px rgba(0,0,0,0.7);">
+                Empowering minds and shaping futures through academic excellence and innovation.
+            </p>
+            <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:px-10 md:text-lg shadow-lg">
+                    Explore Programs
+                </a>
+                <a href="#" class="flex items-center justify-center px-8 py-3 border border-blue-400 text-base font-medium rounded-md text-blue-400 bg-transparent hover:bg-blue-50 md:py-4 md:px-10 md:text-lg shadow-lg">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Background image slider
+    const images = Array.from(document.querySelectorAll('.object-cover'));
+    let idx = 0;
+    setInterval(() => {
+        images.forEach((img, i) => {
+            img.style.opacity = (i === idx) ? '1' : '0';
+        });
+        idx = (idx + 1) % images.length;
+    }, 5000); // Change every 5 seconds
+</script>
+
+{# Academics Section - Improved #}
+<div class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Academics</h2>
+            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                Diverse Programs for a Brighter Future
+            </p>
+            <p class="mt-4 max-w-3xl text-xl text-gray-500 lg:mx-auto">
+                Explore our wide range of undergraduate and postgraduate programs designed to equip students with the knowledge and skills needed for success.
+            </p>
+        </div>
+
+        {# Grid of features/programs #}
+        <div class="mt-20">
+            <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                {# Feature 1: Cutting-Edge Curriculum #}
+                <div class="relative">
+                    <dt>
+                        {# Placeholder icon - replace with actual SVG or icon font #}
+                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Cutting-Edge Curriculum</p>
+                    </dt>
+                    <dd class="mt-2 ml-16 text-base text-gray-500">
+                        Our programs are constantly updated to reflect the latest advancements in each field, ensuring our students are prepared for the future.
+                    </dd>
+                </div>
+
+                {# Feature 2: Experienced Faculty #}
+                <div class="relative">
+                     <dt>
+                        {# Placeholder icon #}
+                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0v-1a6 6 0 00-12 0v1zm-4-11a4 4 0 100-8 4 4 0 000 8z" />
+                            </svg>
+                        </div>
+                        <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Experienced Faculty</p>
+                    </dt>
+                    <dd class="mt-2 ml-16 text-base text-gray-500">
+                        Learn from leading experts and researchers in their respective disciplines who are dedicated to student success and innovation.
+                    </dd>
+                </div>
+
+                 {# Feature 3: Research Opportunities #}
+                <div class="relative">
+                     <dt>
+                        {# Placeholder icon #}
+                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                            </svg>
+                        </div>
+                        <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Research Opportunities</p>
+                    </dt>
+                    <dd class="mt-2 ml-16 text-base text-gray-500">
+                        Engage in groundbreaking research projects and contribute to new discoveries alongside faculty mentors.
+                    </dd>
+                </div>
+
+                 {# Feature 4: Modern Facilities #}
+                <div class="relative">
+                     <dt>
+                        {# Placeholder icon #}
+                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10H6M3 7h3m2 3h8m-4 3h.01M12 21h.01M12 12h.01M4 21l.87-.87C6.17 18.62 7 17.16 7 15.5a5.5 5.5 0 0111 0c0 1.66-.83 3.12-2.13 4.63L20 21M3 3h18m-3 3h-2M3 6h2m0 0l1 1m4-1l1 1M7 6l1 1m-1-1h.01" />
+                            </svg>
+                        </div>
+                        <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Modern Facilities</p>
+                    </dt>
+                    <dd class="mt-2 ml-16 text-base text-gray-500">
+                        Access state-of-the-art labs, libraries, learning spaces, and recreational facilities.
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 

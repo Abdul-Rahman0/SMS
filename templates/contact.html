@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Contact Us - 赣南师范大学{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-16 md:py-24 lg:py-32 bg-gradient-to-br from-blue-50 to-white">
+  <div class="w-full max-w-2xl mx-auto">
+    <div class="relative rounded-2xl shadow-2xl px-8 py-10 bg-white/60 border border-white/70 backdrop-blur-md">
+      <h1 class="text-3xl font-extrabold mb-6 text-center text-gray-900">Contact Us</h1>
+      <p class="text-gray-600 mb-6 text-center text-lg">If you have any questions or inquiries, please feel free to reach out to us. Below is placeholder contact information.</p>
+      {% if messages %}
+        <ul class="messages list-none p-0 mb-4">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }} p-2 rounded text-center text-base font-semibold {% if message.tags == 'success' %}bg-green-100 text-green-800{% elif message.tags == 'error' %}bg-red-100 text-red-800{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <div class="mb-10">
+        <h2 class="text-2xl font-bold text-blue-700 mb-4 flex items-center gap-2">
+          <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 10.5V6.75A2.25 2.25 0 0 0 18.75 4.5H5.25A2.25 2.25 0 0 0 3 6.75v10.5A2.25 2.25 0 0 0 5.25 19.5h13.5A2.25 2.25 0 0 0 21 17.25V13.5"/></svg>
+          Send us a Message
+        </h2>
+        <form method="post" class="space-y-5">
+          {% csrf_token %}
+          {% for field in form %}
+            <div>
+              <label for="{{ field.id_for_label }}" class="block text-gray-700 font-medium mb-1">{{ field.label }}:</label>
+              {{ field|add_class:'w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white/80' }}
+              {% if field.errors %}
+                <p class="text-red-500 text-xs mt-1">{{ field.errors|striptags }}</p>
+              {% endif %}
+            </div>
+          {% endfor %}
+          <button type="submit" class="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+            Send Message
+          </button>
+        </form>
+      </div>
+      <hr class="my-8 border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0H9m3 0h3"/></svg>
+            General Inquiries
+          </h2>
+          <div class="flex items-baseline gap-2 break-words whitespace-normal">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg>
+            <span>Email: info@gannan-normal-university.edu</span>
+          </div>
+          <div class="flex items-baseline gap-2 break-words whitespace-normal">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h2l.4 2M7 13h10l4-8H5.4"/></svg>
+            <span>Phone: (123) 456-7890</span>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7m0 0H9m3 0h3"/></svg>
+            Admissions
+          </h2>
+          <div class="flex items-baseline gap-2 break-words whitespace-normal">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg>
+            <span>Email: admissions@gannan-normal-university.edu</span>
+          </div>
+          <div class="flex items-baseline gap-2 break-words whitespace-normal">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h2l.4 2M7 13h10l4-8H5.4"/></svg>
+            <span>Phone: (123) 987-6543</span>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 12.414a8 8 0 1 0-1.414 1.414l4.243 4.243a1 1 0 0 0 1.414-1.414Z"/></svg>
+            Location
+          </h2>
+          <div class="flex items-baseline gap-2 break-words whitespace-normal">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 12.414a8 8 0 1 0-1.414 1.414l4.243 4.243a1 1 0 0 0 1.414-1.414Z"/></svg>
+            <span>[University Address Placeholder]</span>
+          </div>
+          <div class="flex items-baseline gap-2 break-words whitespace-normal">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 12.414a8 8 0 1 0-1.414 1.414l4.243 4.243a1 1 0 0 0 1.414-1.414Z"/></svg>
+            <span>[City, Country Placeholder]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

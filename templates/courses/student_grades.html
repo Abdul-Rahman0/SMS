@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block page_title %}My Grades{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">My Grades</h1>
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Assignment Grades</h2>
+        <p class="text-gray-700 mb-6">No assignment grades available yet.</p>
+
+        <h2 class="text-xl font-semibold mb-4">Exam Grades</h2>
+        {% if exam_grades %}
+            <ul class="divide-y divide-gray-200">
+                {% for grade in exam_grades %}
+                <li class="py-3">
+                    <p class="text-lg font-semibold text-gray-800">{{ grade.exam.title }} for {{ grade.exam.course.name }}</p>
+                     <p class="text-gray-600 text-sm">Exam Date: {{ grade.exam.exam_date|date:"Y-m-d H:i" }}</p>
+                    <p class="text-gray-700 mt-1"><strong class="text-gray-900">Grade:</strong> 
+                         {% if grade.grade is not None %}
+                            {{ grade.grade }}
+                        {% else %}
+                            Not Graded Yet
+                        {% endif %}
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-700">No exam grades available yet.</p>
+        {% endif %}
+    </div>
+
+    {# Static Data for Grades #}
+    <div class="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200 text-gray-800">
+        <h2 class="text-xl font-semibold mb-4 text-blue-700">Assignment Grades</h2>
+        <ul class="divide-y divide-gray-300 mb-6">
+            <li class="py-3">
+                <p class="text-lg font-semibold text-gray-800">Assignment 1 for Introduction to Programming</p>
+                <p class="text-gray-600 text-sm">Due: 2025-07-15</p>
+                <p class="text-gray-700 mt-1"><strong class="text-gray-900">Grade:</strong> 85/100</p>
+            </li>
+            <li class="py-3">
+                <p class="text-lg font-semibold text-gray-800">Assignment 2 for Linear Algebra</p>
+                <p class="text-gray-600 text-sm">Due: 2025-07-22</p>
+                <p class="text-gray-700 mt-1"><strong class="text-gray-900">Grade:</strong> Not Graded Yet</p>
+            </li>
+        </ul>
+
+        <h2 class="text-xl font-semibold mb-4 text-blue-700">Exam Grades</h2>
+        <ul class="divide-y divide-gray-300">
+            <li class="py-3">
+                <p class="text-lg font-semibold text-gray-800">Midterm Exam for Introduction to Programming</p>
+                 <p class="text-gray-600 text-sm">Exam Date: 2025-08-01</p>
+                <p class="text-gray-700 mt-1"><strong class="text-gray-900">Grade:</strong> 92%</p>
+            </li>
+            <li class="py-3">
+                <p class="text-lg font-semibold text-gray-800">Final Exam for Linear Algebra</p>
+                 <p class="text-gray-600 text-sm">Exam Date: 2025-08-15</p>
+                <p class="text-gray-700 mt-1"><strong class="text-gray-900">Grade:</strong> Not Graded Yet</p>
+            </li>
+        </ul>
+    </div>
+
+</div>
+{% endblock %} 

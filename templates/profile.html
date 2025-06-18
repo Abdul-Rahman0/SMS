@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">My Profile</h1>
+
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Full Name:</strong> {{ user.name }}</p>
+            </div>
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Email:</strong> {{ user.email }}</p>
+            </div>
+            {% if user.dateOfBirth %}
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Date of Birth:</strong> {{ user.dateOfBirth|date:"Y-m-d" }}</p>
+            </div>
+            {% endif %}
+            {% if user.contactNumber %}
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Contact Number:</strong> {{ user.contactNumber }}</p>
+            </div>
+            {% endif %}
+             {% if user.gender %}
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Gender:</strong> {{ user.gender }}</p>
+            </div>
+            {% endif %}
+            {% if user.role %}
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Role:</strong> {{ user.role|capitalize }}</p>
+            </div>
+            {% endif %}
+            {% if user.createdAt %}
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Member Since:</strong> {{ user.createdAt|date:"Y-m-d" }}</p>
+            </div>
+            {% endif %}
+            {# Note: Department and Specialization fields are not currently on the CustomUser model. #}
+            {# If needed, you would add them to the model and the registration/edit forms. #}
+
+            {# Static Dummy Data for Department #}
+            <div>
+                <p class="text-gray-700"><strong class="text-gray-900">Department:</strong> Computer Science</p>
+            </div>
+
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="{% url 'edit_profile' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Edit Profile</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %} 

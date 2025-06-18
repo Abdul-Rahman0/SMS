@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Student Payments{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-center">My Payment History</h1>
+
+        {# Static Dummy Data for Payments #}
+        <div class="max-w-3xl mx-auto mt-6 p-6 bg-white rounded-lg shadow-lg border border-gray-200 text-gray-800">
+            <h2 class="text-xl font-semibold mb-4 text-blue-700">Payment Records</h2>
+            <ul class="divide-y divide-gray-300">
+                <li class="py-4">
+                    <p class="text-lg font-semibold text-gray-800">Tuition Fee Payment</p>
+                    <p class="text-gray-600 text-sm mb-2"><strong class="text-gray-700">Amount:</strong> $1500.00</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Date:</strong> 2025-01-20</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Status:</strong> Paid</p>
+                </li>
+                <li class="py-4">
+                    <p class="text-lg font-semibold text-gray-800">Library Fine</p>
+                    <p class="text-gray-600 text-sm mb-2"><strong class="text-gray-700">Amount:</strong> $10.00</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Date:</strong> 2025-03-10</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Status:</strong> Paid</p>
+                </li>
+                 <li class="py-4">
+                    <p class="text-lg font-semibold text-gray-800">Lab Fee</p>
+                    <p class="text-gray-600 text-sm mb-2"><strong class="text-gray-700">Amount:</strong> $50.00</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Date:</strong> 2025-09-01</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Status:</strong> Pending</p>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+{% endblock %} 

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}All Attendance{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">All Attendance Overview</h1>
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        {% if attendance_by_course %}
+            {% for course_name, attendance_records in attendance_by_course.items %}
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-4">{{ course_name }}</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for record in attendance_records %}
+                    <li class="py-3 flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-700"><strong class="text-gray-900">Student:</strong> {{ record.student.name }}</p>
+                            <p class="text-gray-600 text-sm"><strong class="text-gray-900">Session:</strong> {{ record.session.date|date:"F d, Y" }} {{ record.session.start_time|time:"H:i" }}</p>
+                        </div>
+                        <div>
+                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if record.status == 'present' %}bg-green-100 text-green-800{% elif record.status == 'absent' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                {{ record.get_status_display }}
+                             </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {# Static Data for All Attendance #}
+    <div class="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200 text-gray-800">
+        <h2 class="text-xl font-semibold mb-4 text-blue-700">Attendance Records</h2>
+        
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Introduction to Computer Science</h3>
+        <ul class="divide-y divide-gray-300 mb-6">
+            <li class="py-3 flex justify-between items-center">
+                <div>
+                    <p class="text-gray-700"><strong class="text-gray-900">Student:</strong> Alice Smith</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-900">Session:</strong> 2025-07-16 10:00</p>
+                </div>
+                <div>
+                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Present
+                     </span>
+                </div>
+            </li>
+            <li class="py-3 flex justify-between items-center">
+                <div>
+                    <p class="text-gray-700"><strong class="text-gray-900">Student:</strong> Bob Johnson</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-900">Session:</strong> 2025-07-16 10:00</p>
+                </div>
+                <div>
+                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        Absent
+                     </span>
+                </div>
+            </li>
+        </ul>
+
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Data Structures and Algorithms</h3>
+         <ul class="divide-y divide-gray-300">
+            <li class="py-3 flex justify-between items-center">
+                <div>
+                    <p class="text-gray-700"><strong class="text-gray-900">Student:</strong> Alice Smith</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-900">Session:</strong> 2025-07-17 13:00</p>
+                </div>
+                <div>
+                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Present
+                     </span>
+                </div>
+            </li>
+            <li class="py-3 flex justify-between items-center">
+                <div>
+                    <p class="text-gray-700"><strong class="text-gray-900">Student:</strong> Charlie Brown</p>
+                    <p class="text-gray-600 text-sm"><strong class="text-gray-900">Session:</strong> 2025-07-17 13:00</p>
+                </div>
+                <div>
+                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Present
+                     </span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+{% endblock %} 

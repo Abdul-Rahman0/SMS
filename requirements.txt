@@ -1,0 +1,6 @@
+django
+psycopg2-binary
+djangorestframework
+django-filter
+django-widget-tweaks
+django-jazzmin

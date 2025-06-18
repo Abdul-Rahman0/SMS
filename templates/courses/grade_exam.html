@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Grade Exam for {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">Grade Exam</h1>
+
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Exam: {{ exam.title }}</h2>
+        <p class="text-gray-700 mb-2"><strong class="text-gray-900">Student:</strong> {{ student.name }}</p>
+        <p class="text-gray-600 text-sm mb-4"><strong class="text-gray-700">Exam Date:</strong> {{ exam.exam_date|date:"Y-m-d H:i" }}</p>
+
+        {# You might want to add a link to view the student's exam submission if applicable #}
+
+        <form method="post" class="space-y-4 mt-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="mt-6 text-center">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Grade</button>
+                 {# Link back to the exams list for this course or a list of students for this exam #}
+                 <a href="{% url 'courses:teacher_exam_list' exam.course.id %}" class="ml-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %} 

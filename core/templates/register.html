@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<style>
+  .register-background {
+    background-image: url("/media/IMG_8191.PNG");
+    background-size: cover;
+    background-position: center;
+    /* Add any other background styles you need */
+  }
+</style>
+<div class="max-w-md mx-auto py-12 register-background">
+    <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">Sign Up</h2>
+    <form method="post" class="bg-white shadow rounded-lg p-8 space-y-6">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div>
+            <label class="block text-gray-700 mb-1 font-medium" for="id_username">Username</label>
+            {{ form.username|add_class:"w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" }}
+            {{ form.username.errors }}
+        </div>
+        <div>
+            <label class="block text-gray-700 mb-1 font-medium" for="id_password1">Password</label>
+            {{ form.password1|add_class:"w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" }}
+            {{ form.password1.errors }}
+        </div>
+        <div>
+            <label class="block text-gray-700 mb-1 font-medium" for="id_password2">Confirm Password</label>
+            {{ form.password2|add_class:"w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200" }}
+            {{ form.password2.errors }}
+        </div>
+        <button class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition" type="submit">Register</button>
+    </form>
+    <p class="text-center mt-4 text-gray-600">Already have an account? <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login</a></p>
+</div>
+{% endblock %} 

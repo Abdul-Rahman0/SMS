@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}赣南师范大学 - Gannan Normal University{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Student Management</title>
+    {# Link to the static CSS file #}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Student Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                {# Add links for login/register/logout based on user status #}
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Manage Your Academic Journey</h2>
+            <p>Everything you need for success, in one place.</p>
+            {% if user.is_authenticated %}
+                 <a href="#" class="btn">Go to Dashboard</a> {# Link to dashboard if logged in #}
+            {% else %}
+                 <a href="{% url 'register' %}" class="btn">Get Started</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="features">
+        <h3>Key Features</h3>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <img src="{% static 'core/images/courses.jpg' %}" alt="Courses Icon"> {# Placeholder image #}
+                <h4>Course Catalog</h4>
+                <p>Explore and enroll in a wide range of courses.</p>
+            </div>
+            <div class="feature-item">
+                <img src="{% static 'core/images/grades.jpg' %}" alt="Grades Icon"> {# Placeholder image #}
+                <h4>View Grades</h4>
+                <p>Keep track of your academic performance.</p>
+            </div>
+            <div class="feature-item">
+                 <img src="{% static 'core/images/schedule.jpg' %}" alt="Schedule Icon"> {# Placeholder image #}
+                <h4>My Schedule</h4>
+                <p>Easily access your class and exam schedules.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <h3>Campus Life</h3>
+        <div class="image-grid">
+             <img src="{% static 'core/images/campus1.jpg' %}" alt="Campus View 1"> {# Placeholder image #}
+             <img src="{% static 'core/images/campus2.jpg' %}" alt="Campus View 2"> {# Placeholder image #}
+             <img src="{% static 'core/images/campus3.jpg' %}" alt="Campus View 3"> {# Placeholder image #}
+             {# Add more images here #}
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; {{ year }} Student Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+{% endblock %} 

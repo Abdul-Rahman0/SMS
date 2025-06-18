@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-16 md:py-24 lg:py-32 bg-gradient-to-br from-blue-50 to-white">
+  <div class="w-full max-w-5xl mx-auto">
+    <h1 class="text-3xl font-extrabold mb-10 text-center text-gray-900">Profile</h1>
+    {% if user.is_authenticated %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Profile Details Section -->
+        <div class="relative rounded-2xl shadow-2xl px-8 py-10 bg-white/60 border border-white/70 backdrop-blur-md">
+          <h2 class="text-2xl font-bold mb-6 text-blue-700">Your Information</h2>
+          <div class="space-y-3 text-lg">
+            <p><span class="font-semibold">Email:</span> {{ user.email }}</p>
+            <p><span class="font-semibold">Name:</span> {{ user.name }}</p>
+            <p><span class="font-semibold">Role:</span> {{ user.get_role_display }}</p>
+            <p><span class="font-semibold">Contact Number:</span> {{ user.contactNumber|default:"N/A" }}</p>
+            <p><span class="font-semibold">Date of Birth:</span> {{ user.dateOfBirth|default:"N/A" }}</p>
+            <p><span class="font-semibold">Gender:</span> {{ user.gender|default:"N/A" }}</p>
+            <p><span class="font-semibold">Created At:</span> {{ user.createdAt }}</p>
+          </div>
+        </div>
+        <!-- Update Profile Form Section -->
+        <div class="relative rounded-2xl shadow-2xl px-8 py-10 bg-white/60 border border-white/70 backdrop-blur-md">
+          <h2 class="text-2xl font-bold mb-6 text-blue-700">Update Profile</h2>
+          <form method="post" class="space-y-5">
+            {% csrf_token %}
+            <div>
+              {{ form.name.label_tag }}
+              {{ form.name|add_class:"w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white/80" }}
+              {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                  <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div>
+              {{ form.contactNumber.label_tag }}
+              {{ form.contactNumber|add_class:"w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white/80" }}
+              {% if form.contactNumber.errors %}
+                {% for error in form.contactNumber.errors %}
+                  <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div>
+              {{ form.dateOfBirth.label_tag }}
+              {{ form.dateOfBirth|add_class:"w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white/80" }}
+              {% if form.dateOfBirth.errors %}
+                {% for error in form.dateOfBirth.errors %}
+                  <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div>
+              {{ form.gender.label_tag }}
+              {{ form.gender|add_class:"w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white/80" }}
+              {% if form.gender.errors %}
+                {% for error in form.gender.errors %}
+                  <p class="text-red-500 text-xs italic mt-1">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 mt-2">
+              Update Profile
+            </button>
+          </form>
+        </div>
+      </div>
+    {% else %}
+      <p class="text-center text-lg">You are not logged in.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Welcome, Teacher {{ teacher.name }}!</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {# Assigned Courses Widget #}
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4">My Courses</h2>
+            {% if assigned_courses %}
+                <ul class="list-disc pl-5">
+                    {% for course in assigned_courses %}
+                        <li><a href="#" class="text-blue-600 hover:underline">{{ course.name }}</a></li> {# Link to course details later #}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No courses assigned yet.</p>
+            {% endif %}
+        </div>
+
+        {# Pending Grading Widget #}
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Pending Grading</h2>
+            <p class="text-gray-600 text-3xl font-bold">{{ pending_grading_count }}</p>
+            <p class="text-gray-600">assignments need grading.</p>
+            <div class="mt-4">
+                 <a href="#" class="text-blue-600 hover:underline">View Assignments to Grade</a> {# Link to grading page later #}
+            </div>
+        </div>
+
+        {# Upcoming Exams Widget #}
+        <div class="bg-white p-6 rounded-lg shadow-md">
+             <h2 class="text-xl font-semibold mb-4">Upcoming Exams</h2>
+             {% if upcoming_exams %}
+                 <ul class="list-disc pl-5">
+                     {% for exam in upcoming_exams %}
+                         <li>{{ exam.title }} ({{ exam.course.name }}) - {{ exam.exam_date|date:"Y-m-d H:i" }}</li>
+                     {% endfor %}
+                 </ul>
+             {% else %}
+                 <p class="text-gray-600">No upcoming exams.</p>
+             {% endif %}
+         </div>
+
+    </div>
+
+    {# Add more teacher dashboard widgets/stats here #}
+
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Course Materials for {{ course.name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">Course Materials for {{ course.name }}</h1>
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Uploaded Materials</h2>
+
+        {% if materials %}
+            <ul class="divide-y divide-gray-200">
+                {% for material in materials %}
+                <li class="py-4 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700">{{ material.title }}</h3>
+                        {% if material.description %}
+                            <p class="text-gray-600 text-sm mb-2">{{ material.description }}</p>
+                        {% endif %}
+                        <p class="text-gray-600 text-xs">Uploaded on: {{ material.uploaded_at|date:"F d, Y H:i" }}</p>
+                    </div>
+                    <div>
+                        <a href="{{ material.file.url }}" class="text-blue-600 hover:underline mr-4" download>Download</a>
+                        {# Add links to edit/delete material here later if needed #}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-700">No materials have been uploaded for this course yet.</p>
+        {% endif %}
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Upload New Material</h2>
+            <a href="{% url 'courses:teacher_upload_course_material' course.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Upload Material</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %} 

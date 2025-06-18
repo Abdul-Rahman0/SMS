@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Welcome, {{ student.name }}!</h1>
+
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Student Dashboard</h2>
+        <p class="text-gray-700">This is your personalized dashboard. You can access your profile, courses, schedule, grades, and more from the navigation menu.</p>
+
+        {# Placeholder for dashboard widgets or stats #}
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {# Example Widget Placeholder #}
+            <div class="bg-gray-100 p-4 rounded-md">
+                <h3 class="font-semibold">Upcoming Assignments</h3>
+                <p class="text-gray-600">Check here for your next assignment deadlines.</p>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-md">
+                <h3 class="font-semibold">Recent Grades</h3>
+                <p class="text-gray-600">View your latest grades.</p>
+            </div>
+             <div class="bg-gray-100 p-4 rounded-md">
+                <h3 class="font-semibold">Course Schedule</h3>
+                <p class="text-gray-600">See your upcoming classes.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %} 
