@@ -9,20 +9,24 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for course in all_courses %}
         <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold mb-2">{{ course.name }}</h2>
-            <p class="text-gray-600 mb-4">{{ course.description|truncatechars:150 }}</p>
+            <h2 class="text-xl font-semibold mb-2">{{ course.course_name }}</h2>
+            <p class="text-gray-600 mb-4">{{ course.course_description|truncatechars:150 }}</p>
             <p class="text-gray-700 text-sm mb-2"><strong class="text-gray-900">Credits:</strong> {{ course.credits }}</p>
             {% if course.teacher %}
             <p class="text-gray-700 text-sm mb-4"><strong class="text-gray-900">Teacher:</strong> {{ course.teacher.name }}</p>
             {% endif %}
 
-            {% if course.id in enrolled_course_ids %}
-            <p class="text-green-600 font-semibold mb-4">Enrolled</p>
-            {# Placeholder for Drop button #}
-            <a href="{% url 'drop_course' course.id %}" class="inline-block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">Drop Course</a>
+            {% if course.course_id in enrolled_course_ids %}
+            <form method="post" style="display:inline;">{% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course.course_id }}">
+                <button name="drop" class="bg-red-500 text-white px-3 py-1 rounded">Drop</button>
+            </form>
+            <span class="text-green-600 font-bold">Enrolled</span>
             {% else %}
-            {# Placeholder for Enroll button #}
-            <a href="{% url 'enroll_course' course.id %}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">Enroll</a>
+            <form method="post" style="display:inline;">{% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course.course_id }}">
+                <button name="enroll" class="bg-blue-500 text-white px-3 py-1 rounded">Enroll</button>
+            </form>
             {% endif %}
         </div>
         {% empty %}

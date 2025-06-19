@@ -2,7 +2,7 @@ from django.urls import path
 
 app_name = 'courses'
 
-from .views import course_list_view, enroll_course_view, drop_course_view, student_schedule_view, student_grades_view, student_assignment_list_view, student_exam_list_view, student_payments_view, teacher_course_list_view, create_assignment_view, teacher_assignment_list_view, teacher_submission_list_view, grade_submission_view, teacher_enrolled_students_view, teacher_session_list_view, mark_attendance_view, teacher_attendance_history_view, teacher_exam_list_view, teacher_exam_students_list_view, grade_exam_view, create_exam_view, edit_exam_view, delete_exam_view, teacher_all_assignments_view, teacher_all_attendance_view, teacher_all_exams_view, teacher_all_grades_view, teacher_course_material_list_view, teacher_upload_course_material_view
+from .views import course_list_view, enroll_course_view, drop_course_view, student_schedule_view, student_grades_view, student_assignment_list_view, student_exam_list_view, student_payments_view, teacher_course_list_view, create_assignment_view, teacher_assignment_list_view, teacher_submission_list_view, grade_submission_view, teacher_enrolled_students_view, teacher_session_list_view, mark_attendance_view, teacher_attendance_history_view, teacher_exam_list_view, teacher_exam_students_list_view, grade_exam_view, create_exam_view, edit_exam_view, delete_exam_view, teacher_all_assignments_view, teacher_all_attendance_view, teacher_all_exams_view, teacher_all_grades_view, teacher_course_material_list_view, teacher_upload_course_material_view, fake_payment_gateway_view, create_session_view
 
 urlpatterns = [
     path('list/', course_list_view, name='course_list'), # URL for listing all courses
@@ -13,6 +13,9 @@ urlpatterns = [
     path('assignments/', student_assignment_list_view, name='assignments'), # URL for student assignments
     path('exams/', student_exam_list_view, name='exams'),           # URL for student exams
     path('payments/', student_payments_view, name='payments'),         # URL for student payments
+    path('pay/<int:course_id>/', fake_payment_gateway_view, name='fake_payment_gateway'), # Fake payment gateway
+    path('teacher/courses/<int:course_id>/sessions/', teacher_session_list_view, name='teacher_session_list'),
+    path('teacher/courses/<int:course_id>/sessions/create/', create_session_view, name='create_session'),
 
     # Teacher URLs
     path('teacher/courses/', teacher_course_list_view, name='teacher_course_list'), # URL for listing teacher's courses
@@ -25,7 +28,6 @@ urlpatterns = [
     path('teacher/submissions/<int:assignment_id>/', teacher_submission_list_view, name='teacher_submission_list'), # URL for listing submissions for an assignment
     path('teacher/submissions/grade/<int:submission_id>/', grade_submission_view, name='grade_submission'), # URL for grading a submission
     path('teacher/courses/<int:course_id>/students/', teacher_enrolled_students_view, name='teacher_enrolled_students'), # URL for listing students in a teacher's course
-    path('teacher/courses/<int:course_id>/sessions/', teacher_session_list_view, name='teacher_session_list'), # URL for listing sessions for a course
     path('teacher/sessions/<int:session_id>/attendance/', mark_attendance_view, name='mark_attendance'), # URL for marking attendance for a session
     path('teacher/courses/<int:course_id>/attendance/history/', teacher_attendance_history_view, name='teacher_attendance_history'), # URL for attendance history
     path('teacher/courses/<int:course_id>/exams/', teacher_exam_list_view, name='teacher_exam_list'), # URL for listing exams for a course

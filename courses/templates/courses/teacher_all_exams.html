@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">All Exams for My Courses</h1>
+    {% for exam in exams %}
+      <div class="mb-4 p-4 bg-white rounded shadow">
+        <h3 class="text-xl font-semibold">{{ exam.title }}</h3>
+        <p><strong>Course:</strong> {{ exam.course.name }}</p>
+        <p><strong>Date:</strong> {{ exam.exam_date }}</p>
+        <p>{{ exam.description }}</p>
+      </div>
+    {% empty %}
+      <p>No exams found for your assigned courses.</p>
+    {% endfor %}
+</div>
+{% endblock %} 

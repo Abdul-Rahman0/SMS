@@ -3,33 +3,47 @@
 {% block title %}Student Payments{% endblock %}
 
 {% block content %}
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6 text-center">My Payment History</h1>
-
-        {# Static Dummy Data for Payments #}
-        <div class="max-w-3xl mx-auto mt-6 p-6 bg-white rounded-lg shadow-lg border border-gray-200 text-gray-800">
-            <h2 class="text-xl font-semibold mb-4 text-blue-700">Payment Records</h2>
-            <ul class="divide-y divide-gray-300">
-                <li class="py-4">
-                    <p class="text-lg font-semibold text-gray-800">Tuition Fee Payment</p>
-                    <p class="text-gray-600 text-sm mb-2"><strong class="text-gray-700">Amount:</strong> $1500.00</p>
-                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Date:</strong> 2025-01-20</p>
-                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Status:</strong> Paid</p>
-                </li>
-                <li class="py-4">
-                    <p class="text-lg font-semibold text-gray-800">Library Fine</p>
-                    <p class="text-gray-600 text-sm mb-2"><strong class="text-gray-700">Amount:</strong> $10.00</p>
-                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Date:</strong> 2025-03-10</p>
-                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Status:</strong> Paid</p>
-                </li>
-                 <li class="py-4">
-                    <p class="text-lg font-semibold text-gray-800">Lab Fee</p>
-                    <p class="text-gray-600 text-sm mb-2"><strong class="text-gray-700">Amount:</strong> $50.00</p>
-                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Date:</strong> 2025-09-01</p>
-                    <p class="text-gray-600 text-sm"><strong class="text-gray-700">Status:</strong> Pending</p>
-                </li>
-            </ul>
-        </div>
-
-    </div>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">My Course Payments</h1>
+    <table class="min-w-full bg-white rounded shadow">
+        <thead>
+            <tr>
+                <th class="py-2 px-4">Course</th>
+                <th class="py-2 px-4">Amount</th>
+                <th class="py-2 px-4">Status</th>
+                <th class="py-2 px-4">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in course_payments %}
+            <tr>
+                <td class="py-2 px-4">{{ item.course.course_name }}</td>
+                <td class="py-2 px-4">
+                    {% if item.payment %}
+                        ${{ item.payment.amount }}
+                    {% else %}
+                        $1000
+                    {% endif %}
+                </td>
+                <td class="py-2 px-4">
+                    {% if item.payment and item.payment.status == 'paid' %}
+                        <span class="text-green-600 font-bold">Paid</span>
+                    {% else %}
+                        <span class="text-red-600 font-bold">Pending</span>
+                    {% endif %}
+                </td>
+                <td class="py-2 px-4">
+                    {% if not item.payment or item.payment.status != 'paid' %}
+                        <a href="{% url 'courses:fake_payment_gateway' item.course.course_id %}" class="bg-blue-500 text-white px-3 py-1 rounded">Pay</a>
+                    {% else %}
+                        <span class="text-gray-500">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="4" class="text-center py-4">No enrolled courses.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %} 

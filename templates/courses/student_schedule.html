@@ -29,27 +29,9 @@
                 </li>
                 {% endfor %}
             </ul>
+        {% else %}
+            <p>No scheduled classes.</p>
         {% endif %}
     </div>
-
-    {# Static Dummy Data for Schedule #}
-    <div class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200 text-gray-800">
-        <h2 class="text-xl font-semibold mb-4 text-blue-700">Schedule</h2>
-        <ul class="divide-y divide-gray-300">
-            <li class="py-4">
-                <p class="text-lg font-semibold text-gray-800">Introduction to Programming</p>
-                <p class="text-gray-600 text-sm">Monday, 10:00 AM - 11:30 AM</p>
-                <p class="text-gray-600 text-sm">Location: Room 101</p>
-                <p class="text-gray-600 text-sm">Teacher: Dr. Smith</p>
-            </li>
-            <li class="py-4">
-                <p class="text-lg font-semibold text-gray-800">Linear Algebra</p>
-                <p class="text-gray-600 text-sm">Wednesday, 1:00 PM - 2:30 PM</p>
-                <p class="text-gray-600 text-sm">Location: Building C, Lab 3</p>
-                <p class="text-gray-600 text-sm">Teacher: Prof. Johnson</p>
-            </li>
-        </ul>
-    </div>
-
 </div>
 {% endblock %} 

@@ -4,53 +4,51 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Course, CourseSchedule, Assignment, Exam, StudentAssignmentGrade, StudentExamGrade, Payment, Submission, Session, Attendance, Enrollment, CourseMaterial # Import necessary models from courses.models
 from users.models import CustomUser # Import CustomUser from users.models
-from core.models import StudentProfile # Import StudentProfile from core.models
+from core.models import StudentProfile, Course, Enrollment # Import StudentProfile from core.models and Course from core.models
 from django.db import IntegrityError
 from django.utils import timezone # Import timezone
 from .forms import SubmissionForm, AssignmentForm, GradeAssignmentForm, AttendanceForm, GradeExamForm, ExamForm, CourseMaterialForm # Import SubmissionForm, AssignmentForm, and GradeAssignmentForm, GradeExamForm, ExamForm, CourseMaterialForm
 from django.forms import modelformset_factory, inlineformset_factory, BaseFormSet, formset_factory # Import modelformset_factory, inlineformset_factory, BaseFormset, formset_factory
 import logging
+from django import forms
 
 @login_required
 def course_list_view(request):
     """
-    Display a list of all available courses.
-    Students should be able to see which courses they are enrolled in.
+    Display a list of all available courses. Students can enroll in any course.
     """
-    # Get the logged-in user
     user = request.user
-
-    # Check if the user is a student and get their department
-    department = None
-    if user.is_authenticated and hasattr(user, 'role') and user.role == 'student':
-        try:
-            student_profile = user.student_profile
-            department = student_profile.department
-        except StudentProfile.DoesNotExist:
-            # Handle cases where a student somehow doesn't have a profile
-            messages.error(request, 'Your student profile could not be found.')
-            return render(request, 'courses/course_list.html', {'all_courses': [], 'enrolled_course_ids': []})
-
-    # Filter courses by the student's department if they are a student and have a department
-    if department:
-        all_courses = Course.objects.filter(department=department)
-    else:
-        # If not a student, or student has no department assigned, show no courses or handle as appropriate
-        # For now, showing no courses if no department is assigned to a student, or if user is not a student
-        all_courses = Course.objects.none()
-
-    # Get the list of course IDs the logged-in student is enrolled in
+    all_courses = Course.objects.all()
     enrolled_course_ids = []
     if user.is_authenticated and hasattr(user, 'role') and user.role == 'student':
-         # Assuming 'core_enrollments' is the related_name on the CustomUser model for enrollments
-         enrolled_courses = user.core_enrollments.values_list('course__id', flat=True)
-         enrolled_course_ids = list(enrolled_courses)
+        enrolled_courses = user.core_enrollments.values_list('course__course_id', flat=True)
+        enrolled_course_ids = list(enrolled_courses)
+
+        # Handle enroll/drop POST
+        if request.method == 'POST':
+            course_id = int(request.POST.get('course_id'))
+            if 'enroll' in request.POST and course_id not in enrolled_course_ids:
+                Enrollment.objects.create(student=user, course_id=course_id)
+                # Create a pending payment for this course if not already exists
+                course = Course.objects.get(course_id=course_id)
+                Payment.objects.get_or_create(
+                    student=user,
+                    description=f"Course Fee: {course.course_name}",
+                    amount=1000,
+                    status='pending',
+                    defaults={
+                        'payment_date': timezone.now(),
+                    }
+                )
+            elif 'drop' in request.POST and course_id in enrolled_course_ids:
+                Enrollment.objects.filter(student=user, course_id=course_id).delete()
+                # Optionally, you could also delete the payment or mark as cancelled
+            return redirect('courses:course_list')
 
     context = {
         'all_courses': all_courses,
         'enrolled_course_ids': enrolled_course_ids,
     }
-
     return render(request, 'courses/course_list.html', context)
 
 @login_required
@@ -83,14 +81,11 @@ def enroll_course_view(request, course_id):
         messages.error(request, f'This course is not available in your department ({student_department.department_name}).')
         return redirect('course_list')
 
+    from courses.models import Enrollment
     try:
-        # Create the enrollment record
-        # Use the related_name 'core_enrollments' from CustomUser model
-        user.core_enrollments.create(course=course)
+        # Create the enrollment record if it doesn't exist
+        Enrollment.objects.get_or_create(student=user, course=course)
         messages.success(request, f'Successfully enrolled in {course.name}.')
-    except IntegrityError:
-        # Handle the case where the student is already enrolled (due to unique_together constraint)
-        messages.info(request, f'You are already enrolled in {course.name}.')
     except Exception as e:
         messages.error(request, f'An error occurred during enrollment: {e}')
 
@@ -203,50 +198,53 @@ def student_assignment_list_view(request):
 
 @login_required
 def student_exam_list_view(request):
-    """
-    Display exams for the logged-in student's enrolled courses.
-    """
-    # Ensure the logged-in user is a student
-    if not hasattr(request.user, 'role') or request.user.role != 'student':
-        messages.error(request, 'You do not have permission to view this page.')
-        return redirect('home') # Redirect to home or a permission denied page
-
+    from django.utils import timezone
+    import logging
     student = request.user
-
-    # Get the courses the student is enrolled in
+    logger = logging.getLogger(__name__)
     enrolled_course_ids = student.courses_enrollments.values_list('course__id', flat=True)
-
-    # Get exams for the enrolled courses
-    exams = Exam.objects.filter(course__id__in=enrolled_course_ids).order_by('exam_date')
-
-    context = {
-        'student': student,
-        'exams': exams,
-    }
-
-    return render(request, 'courses/student_exams.html', context)
+    logger.info(f"Student {student} enrolled in course IDs: {list(enrolled_course_ids)}")
+    exams = Exam.objects.filter(
+        course__id__in=enrolled_course_ids,
+        exam_date__gte=timezone.now()
+    ).order_by('exam_date')
+    logger.info(f"Exams found for student: {[exam.title for exam in exams]}")
+    return render(request, 'courses/student_exams.html', {'exams': exams})
 
 @login_required
 def student_payments_view(request):
     """
-    Display the logged-in student's payment history.
+    Display the logged-in student's course payments and allow fake payment (mark as paid).
     """
-    # Ensure the logged-in user is a student
     if not hasattr(request.user, 'role') or request.user.role != 'student':
         messages.error(request, 'You do not have permission to view this page.')
-        return redirect('home') # Redirect to home or a permission denied page
+        return redirect('home')
 
     student = request.user
+    enrolled_courses = Course.objects.filter(enrollments__student=student)
 
-    # Get all payments for the student, ordered by date
-    payments = Payment.objects.filter(student=student).order_by('-payment_date')
+    # Handle payment
+    if request.method == 'POST' and 'pay_course_id' in request.POST:
+        course_id = int(request.POST.get('pay_course_id'))
+        course = Course.objects.get(course_id=course_id)
+        payment = Payment.objects.filter(student=student, description__icontains=course.course_name, status='pending').first()
+        if payment:
+            payment.status = 'paid'
+            payment.payment_date = timezone.now()
+            payment.save()
+            messages.success(request, 'Payment successful!')
+        return redirect('courses:payments')
 
-    context = {
-        'student': student,
-        'payments': payments,
-    }
+    # Build payment info for each enrolled course
+    course_payments = []
+    for course in enrolled_courses:
+        payment = Payment.objects.filter(student=student, description__icontains=course.course_name).order_by('-payment_date').first()
+        course_payments.append({
+            'course': course,
+            'payment': payment
+        })
 
-    return render(request, 'courses/student_payments.html', context)
+    return render(request, 'courses/student_payments.html', {'course_payments': course_payments})
 
 @login_required
 def submit_assignment_view(request, assignment_id):
@@ -879,19 +877,32 @@ def grade_submission_view(request, submission_id):
 
 @login_required
 def teacher_session_list_view(request, course_id):
-    """
-    Display a list of sessions for a specific course for the assigned teacher.
-    """
-    # Ensure the logged-in user is a teacher
-    if not hasattr(request.user, 'role') or request.user.role != 'teacher':
-        messages.error(request, 'You do not have permission to view this page.')
-        return redirect('home') # Redirect to home or a permission denied page
+    user = request.user
+    course = get_object_or_404(Course, course_id=course_id)
+    if not (user.role == 'teacher' and course.teacher == user) and not user.role == 'admin':
+        messages.error(request, "You do not have permission to view this page.")
+        return redirect('courses:teacher_course_list')
+    sessions = CourseSchedule.objects.filter(course=course).order_by('day_of_week', 'start_time')
+    return render(request, 'courses/teacher_session_list.html', {'course': course, 'sessions': sessions})
 
-    # Placeholder logic - replace with actual session listing functionality
-    messages.info(request, f'Placeholder for listing sessions for course {course_id}.')
-
-    # Redirect to the teacher's course list or another appropriate page for now
-    return redirect('courses:teacher_course_list')
+@login_required
+def create_session_view(request, course_id):
+    user = request.user
+    course = get_object_or_404(Course, course_id=course_id)
+    if not (user.role == 'teacher' and course.teacher == user) and not user.role == 'admin':
+        messages.error(request, "You do not have permission to add sessions.")
+        return redirect('courses:teacher_course_list')
+    if request.method == 'POST':
+        form = CourseScheduleForm(request.POST)
+        if form.is_valid():
+            session = form.save(commit=False)
+            session.course = course
+            session.save()
+            messages.success(request, "Session added!")
+            return redirect('courses:teacher_session_list', course_id=course_id)
+    else:
+        form = CourseScheduleForm()
+    return render(request, 'courses/create_session.html', {'form': form, 'course': course})
 
 @login_required
 def grade_exam_view(request, exam_id, student_id):
@@ -976,28 +987,10 @@ def teacher_all_assignments_view(request):
 
 @login_required
 def teacher_all_exams_view(request):
-    """
-    Display a list of all exams for all courses assigned to the logged-in teacher.
-    """
-    # Ensure the logged-in user is a teacher
-    if not hasattr(request.user, 'role') or request.user.role != 'teacher':
-        messages.error(request, 'You do not have permission to view this page.')
-        return redirect('home') # Redirect to home or a permission denied page
-
     teacher = request.user
-
-    # Get the IDs of the courses assigned to the teacher
     assigned_course_ids = teacher.courses.values_list('id', flat=True)
-
-    # Get all exams for these courses
-    all_exams = Exam.objects.filter(course__id__in=assigned_course_ids).order_by('course__name', 'exam_date')
-
-    context = {
-        'teacher': teacher,
-        'all_exams': all_exams,
-    }
-
-    return render(request, 'courses/teacher_all_exams.html', context)
+    exams = Exam.objects.filter(course__id__in=assigned_course_ids).order_by('exam_date')
+    return render(request, 'courses/teacher_all_exams.html', {'exams': exams})
 
 @login_required
 def teacher_all_grades_view(request):
@@ -1121,3 +1114,31 @@ def teacher_upload_course_material_view(request, course_id):
     }
 
     return render(request, 'courses/teacher_upload_course_material.html', context)
+
+@login_required
+def fake_payment_gateway_view(request, course_id):
+    student = request.user
+    course = get_object_or_404(Course, course_id=course_id)
+    payment = Payment.objects.filter(
+        student=student,
+        description=f"Course Fee: {course.course_name}",
+        status='pending'
+    ).first()
+    if not payment:
+        messages.error(request, "No pending payment found for this course.")
+        return redirect('courses:payments')
+
+    if request.method == 'POST':
+        # Here you could validate fake card info, etc.
+        payment.status = 'paid'
+        payment.payment_date = timezone.now()
+        payment.save()
+        messages.success(request, "Payment successful!")
+        return redirect('courses:payments')
+
+    return render(request, 'courses/fake_payment_gateway.html', {'course': course, 'payment': payment})
+
+class CourseScheduleForm(forms.ModelForm):
+    class Meta:
+        model = CourseSchedule
+        fields = ['day_of_week', 'start_time', 'end_time', 'location']
