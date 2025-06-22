@@ -160,8 +160,12 @@ class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     due_date = models.DateField()
-    marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
-
+    # marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='userasign'
+    )
     file = models.FileField(upload_to='assignments/', null=True, blank=True)
 
     class Meta:
@@ -171,6 +175,36 @@ class Assignment(models.Model):
     def create_assignment(self, course_id, title, description, due_date): pass
     def submit_assignment(self, student_id, file): pass
     def grade_assignment(self, student_id, assignment_id, marks): pass
+    
+class AssignmentSubmit(models.Model):
+    
+    file = models.FileField(upload_to='assignments/', null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    due_date = models.DateField(default=timezone.now)
+    assigment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignments_submit') # Added related_name
+    # ✅ This is the missing field you need:
+    submitted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='user'
+    )
+    marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
+
+    class Meta:
+        
+        verbose_name = 'assignment submit'
+        verbose_name_plural = 'assignments submission'
+class Assignmentgrade(models.Model):
+    
+    marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
+    description = models.TextField(null=True, blank=True)
+    due_date = models.DateField(default=timezone.now)
+    assigment_submit = models.ForeignKey(AssignmentSubmit, on_delete=models.CASCADE, related_name='assignments_grade') # Added related_name
+    
+
+    class Meta:
+        verbose_name = 'assignment grade'
+        verbose_name_plural = 'assignments grades'
 
 # Payment
 class Payment(models.Model):
@@ -190,6 +224,7 @@ class Payment(models.Model):
 
 # Student Course Schedule
 class StudentCourseSchedule(models.Model):
+    
     # ForeignKey to the CustomUser who is a student
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='course_schedules')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
