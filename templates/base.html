@@ -78,13 +78,11 @@
                      {% else %}
                          {# Authenticated but not a student or teacher (e.g., admin) #}
                          {# This will be updated for the admin role later #}
-                         <a href="{% url 'profile' %}" class="px-3 py-2 hover:bg-gray-700 rounded">Profile</a>
-                         <a href="{% url 'logout' %}" class="px-3 py-2 hover:bg-gray-700 rounded">Logout</a>
+                         
                      {% endif %}
                 {% else %}
                     {# Logged out state #}
-                    <a href="{% url 'login' %}" class="px-3 py-2 hover:bg-gray-700 rounded">Login</a>
-                    <a href="{% url 'register' %}" class="px-3 py-2 hover:bg-gray-700 rounded">Register</a>
+                    
                 {% endif %}
                 <a href="{% url 'contact' %}" class="px-3 py-2 hover:bg-gray-700 rounded">Contact</a>
                 <a href="{% url 'about' %}" class="px-3 py-2 hover:bg-gray-700 rounded">About</a>
