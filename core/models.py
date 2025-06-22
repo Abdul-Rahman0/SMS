@@ -160,6 +160,8 @@ class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     due_date = models.DateField()
+    marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
+
     file = models.FileField(upload_to='assignments/', null=True, blank=True)
 
     class Meta:
