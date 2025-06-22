@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Only core app cache (optional duplicate safety)
+core/__pycache__/
+
+# Ignore migrations cache too
+*/migrations/__pycache__/
+
+
+# Ignore Django migration files except __init__.py
+*/migrations/*
+!*/migrations/__init__.py
