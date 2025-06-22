@@ -190,7 +190,6 @@ class Payment(models.Model):
 
 # Student Course Schedule
 class StudentCourseSchedule(models.Model):
-    schedule_id = models.AutoField(primary_key=True)
     # ForeignKey to the CustomUser who is a student
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='course_schedules')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

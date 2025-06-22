@@ -23,7 +23,7 @@ from .models import (
 
 # Keep registrations for other models
 admin.site.register(Department)
-admin.site.register(Course)
+# admin.site.register(Course)
 admin.site.register(Exam)
 admin.site.register(ExamSchedule)
 admin.site.register(ExamResult)

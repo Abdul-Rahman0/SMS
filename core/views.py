@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages # Import messages framework
-from .forms import ContactForm, StudentProfileEditForm # Import the ContactForm and StudentProfileEditForm
-from users.models import CustomUser, ROLE_CHOICES # Import CustomUser and ROLE_CHOICES
+from .forms import ContactForm  # Import the ContactForm and StudentProfileEditForm
+from users.models import CustomUser # Import CustomUser and ROLE_CHOICES
 from .models import Course, Assignment, Exam, Payment
 from django.db.models import Count, Q # Import Count and Q for aggregations and queries
 from django.utils import timezone
@@ -45,31 +45,6 @@ def user_profile_view(request):
 
     return render(request, 'profile.html', {'user': user})
 
-@login_required
-def user_profile_edit_view(request):
-    """
-    Allow the logged-in user to edit their profile information.
-    Accessible to any authenticated user (Student, Teacher, Admin).
-    """
-    user = request.user # The logged-in user
-
-    # Use the StudentProfileEditForm for now, as it includes common fields.
-    # We might create separate forms or customize this one based on role later if needed.
-    if request.method == 'POST':
-        form = StudentProfileEditForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile has been updated successfully!')
-            return redirect('profile') # Redirect to the generic profile detail page
-    else:
-        form = StudentProfileEditForm(instance=user) # Pre-populate the form with existing data
-
-    context = {
-        'user': user,
-        'form': form,
-    }
-
-    return render(request, 'edit_profile.html', context)
 
 @login_required
 def student_dashboard_view(request):
@@ -89,8 +64,7 @@ def student_dashboard_view(request):
 
     return render(request, 'dashboard.html', {'student': student}) 
 
-@login_required
-def teacher_dashboard_view(request):
+
     """
     Display the teacher dashboard.
     Only accessible to authenticated users who are teachers.
