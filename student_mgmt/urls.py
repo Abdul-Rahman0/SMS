@@ -27,7 +27,6 @@ urlpatterns = [
     path('api/', include('rest_framework.urls')),
     path('users/', include('users.urls')),
     path('courses/', include('courses.urls', namespace='courses')),
-    path('accounts/profile/', users_views.profile_view, name='profile'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

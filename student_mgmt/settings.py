@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig', # Move users app to the top
-    'jazzmin', # Add jazzmin here
+    'jazzmin', # Add grappelli here
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
