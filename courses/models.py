@@ -4,8 +4,8 @@ from django.utils import timezone
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
-    head_of_department = models.ForeignKey(CustomUser, related_name='courses_headed_departments', on_delete=models.SET_NULL, null=True, limit_choices_to={'role': 'teacher'})
-    admin = models.ForeignKey(CustomUser, related_name='admin_departments', on_delete=models.SET_NULL, null=True, limit_choices_to={'role': 'admin'})
+    head_of_department = models.ForeignKey(CustomUser, related_name='courses_headed_departments', on_delete=models.SET_NULL, null=True)
+    admin = models.ForeignKey(CustomUser, related_name='admin_departments', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -14,7 +14,7 @@ class Course(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     credits = models.IntegerField()
-    teacher = models.ForeignKey(CustomUser, related_name='courses', on_delete=models.SET_NULL, null=True, limit_choices_to={'role': 'teacher'})
+    teacher = models.ForeignKey(CustomUser, related_name='courses', on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
@@ -24,7 +24,7 @@ class Enrollment(models.Model):
     """
     Represents a student's enrollment in a course.
     """
-    student = models.ForeignKey(CustomUser, related_name='courses_enrollments', on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
+    student = models.ForeignKey(CustomUser, related_name='courses_enrollments', on_delete=models.CASCADE)
     course = models.ForeignKey(Course, related_name='enrollments', on_delete=models.CASCADE)
     enrollment_date = models.DateTimeField(default=timezone.now)
 
@@ -131,7 +131,7 @@ class Payment(models.Model):
         ('failed', 'Failed'),
     ]
 
-    student = models.ForeignKey(CustomUser, related_name='courses_payments', on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
+    student = models.ForeignKey(CustomUser, related_name='courses_payments', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
@@ -189,7 +189,7 @@ class Attendance(models.Model):
     ]
 
     session = models.ForeignKey(Session, related_name='attendance', on_delete=models.CASCADE)
-    student = models.ForeignKey(CustomUser, related_name='attendance', on_delete=models.CASCADE, limit_choices_to={'role': 'student'})
+    student = models.ForeignKey(CustomUser, related_name='attendance', on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     recorded_at = models.DateTimeField(auto_now_add=True) # When the attendance was recorded
 
