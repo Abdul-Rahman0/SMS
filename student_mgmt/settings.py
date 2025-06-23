@@ -128,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -169,4 +170,31 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Student Management Admin",
+    "site_header": "Student Management",
+    "site_brand": "StudentMgmt",
+    "welcome_sign": "Welcome to Student Management Admin",
+    "copyright": "StudentMgmt",
+    "search_model": ["users.CustomUser", "courses.Course", "courses.Enrollment"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "order_with_respect_to": ["users", "courses", "core"],
+    "custom_css": "admin/custom_admin.css",
+    "icons": {
+        "users.CustomUser": "fas fa-user",
+        "courses.Course": "fas fa-book",
+        "courses.Enrollment": "fas fa-user-graduate",
+    },
+    "theme": "cosmo",
+    "dark_mode_theme": "darkly",
+    "primary_color": "#1a73e8",
+    "accent": "#fbbc05",
+    "navbar": "#1a73e8",
+    "no_navbar_border": True,
+    "footer": "#1a73e8",
+    "body": "#F7F7F7",
+    "text": "#222",
 }

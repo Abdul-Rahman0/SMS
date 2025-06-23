@@ -70,6 +70,13 @@ class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     due_date = models.DateTimeField()
+    created_by = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='assignments_created',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f'{self.title} for {self.course.name}'

@@ -6,6 +6,7 @@ from django.utils import timezone
 class CustomUser(AbstractUser):
     # ROLE_CHOICES is now defined at the module level
     
+    username = models.CharField(max_length=150, unique=True, null=True, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     contactNumber = models.CharField(max_length=20, blank=True, null=True)
@@ -30,7 +31,7 @@ class CustomUser(AbstractUser):
     createdAt = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
