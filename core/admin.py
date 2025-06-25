@@ -93,8 +93,11 @@ class TeacherAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user":
             try:
-                teacher_group = Group.objects.get(name="Teacher")
-                kwargs["queryset"] = User.objects.filter(username = request.user)
+                if request.user.is_superuser:
+                    teacher_group = Group.objects.get(name="Teacher")
+                    kwargs["queryset"] = User.objects.filter(groups = teacher_group)
+                else :
+                    kwargs["queryset"] = User.objects.filter(username = request.user)
             except Group.DoesNotExist:
                 kwargs["queryset"] = User.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -181,8 +184,12 @@ class StudentAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user":
             try:
-                teacher_group = Group.objects.get(name="Student")
-                kwargs["queryset"] = User.objects.filter(username = request.user)
+                if request.user.is_superuser:
+                    student_group = Group.objects.get(name="Student")
+                    kwargs["queryset"] = User.objects.filter(groups = student_group)
+                else :
+                    teacher_group = Group.objects.get(name="Student")
+                    kwargs["queryset"] = User.objects.filter(username = request.user)
             except Group.DoesNotExist:
                 kwargs["queryset"] = User.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
