@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     # Add any other apps here
     # 'your_other_app',
     'core.apps.CoreConfig', # Add the core app
-    'courses.apps.CoursesConfig', # Add the courses app
     'widget_tweaks', # Add widget_tweaks here
 ]
 
@@ -178,15 +177,15 @@ JAZZMIN_SETTINGS = {
     "site_brand": "StudentMgmt",
     "welcome_sign": "Welcome to Student Management Admin",
     "copyright": "StudentMgmt",
-    "search_model": ["users.CustomUser", "courses.Course", "courses.Enrollment"],
+    "search_model": ["users.CustomUser"],
     "show_sidebar": True,
     "navigation_expanded": True,
-    "order_with_respect_to": ["users", "courses", "core"],
+    "order_with_respect_to": ["users", "core"],
     "custom_css": "admin/custom_admin.css",
     "icons": {
         "users.CustomUser": "fas fa-user",
-        "courses.Course": "fas fa-book",
-        "courses.Enrollment": "fas fa-user-graduate",
+        
+        "core.Enrollment": "fas fa-user-graduate",
     },
     "theme": "cosmo",
     "dark_mode_theme": "darkly",

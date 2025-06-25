@@ -12,27 +12,7 @@ class Department(models.Model):
         return self.department_name
 
 # Admin Profile (inherits from models.Model and links to CustomUser)
-class AdminProfile(models.Model):
-    # Link to the CustomUser model
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True, related_name='admin_profile')
-    # Add Admin-specific fields here if any (admin_id was on the old Admin, but OneToOneField PK replaces it)
-    # Example: admin_specific_field = models.CharField(max_length=100)
 
-    class Meta:
-        verbose_name = 'admin profile'
-        verbose_name_plural = 'admin profiles'
-
-    def __str__(self):
-        return f"Admin Profile for {self.user.email}"
-
-    # Admin methods (consider if these should be on the CustomUser or the profile)
-    # For now, keeping placeholder methods on the profile as per your initial structure
-    def add_student(self, student_data): pass
-    def remove_student(self, student_id): pass
-    def add_teacher(self, teacher_data): pass
-    def remove_teacher(self, teacher_id): pass
-    def assign_course(self, teacher_id, course_id): pass
-    def view_all_users(self): pass
 
 # Teacher Profile (inherits from models.Model and links to CustomUser)
 class TeacherProfile(models.Model):
@@ -194,17 +174,17 @@ class AssignmentSubmit(models.Model):
         
         verbose_name = 'assignment submit'
         verbose_name_plural = 'assignments submission'
-class Assignmentgrade(models.Model):
+# class Assignmentgrade(models.Model):
     
-    marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
-    description = models.TextField(null=True, blank=True)
-    due_date = models.DateField(default=timezone.now)
-    assigment_submit = models.ForeignKey(AssignmentSubmit, on_delete=models.CASCADE, related_name='assignments_grade') # Added related_name
+#     marks = models.CharField(max_length=10,verbose_name="Marks",null=True,blank=True)
+#     description = models.TextField(null=True, blank=True)
+#     due_date = models.DateField(default=timezone.now)
+#     assigment_submit = models.ForeignKey(AssignmentSubmit, on_delete=models.CASCADE, related_name='assignments_grade') # Added related_name
     
 
-    class Meta:
-        verbose_name = 'assignment grade'
-        verbose_name_plural = 'assignments grades'
+#     class Meta:
+#         verbose_name = 'assignment grade'
+#         verbose_name_plural = 'assignments grades'
 
 # Payment
 class Payment(models.Model):
@@ -276,7 +256,7 @@ class ContactMessage(models.Model):
 class Enrollment(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='core_enrollments')
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='enrollments')
-    enrollment_date = models.DateField(auto_now_add=True)
+    enrollment_date = models.DateField()
 
     class Meta:
         unique_together = ('student', 'course') # Ensure a student can only enroll in a course once

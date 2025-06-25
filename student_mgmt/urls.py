@@ -26,7 +26,6 @@ urlpatterns = [
     path('', include('core.urls')),  # This will include all patterns from core/urls.py
     path('api/', include('rest_framework.urls')),
     path('users/', include('users.urls')),
-    path('courses/', include('courses.urls', namespace='courses')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

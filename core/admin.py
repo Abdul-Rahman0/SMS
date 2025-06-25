@@ -6,12 +6,14 @@ from .models import (
     # Remove User and old Admin, Student, Teacher imports
     # User, Admin, Student, Teacher,
     Department, Course, Exam, ExamSchedule,
-    ExamResult, Attendance, Assignment, Payment, StudentCourseSchedule, CourseWork, AssignmentSubmit, Assignmentgrade,
+    ExamResult, Attendance, Assignment, Payment, StudentCourseSchedule, CourseWork, 
+    AssignmentSubmit,Enrollment,
     # Import the new profile models
-    AdminProfile, TeacherProfile, StudentProfile,
+    TeacherProfile, StudentProfile,
     # Also import ContactMessage if you want to register it
     ContactMessage,
 )
+
 
 # Remove old registrations for User, Admin, Student, Teacher
 # admin.site.register(User)
@@ -81,11 +83,18 @@ class TeacherAdmin(admin.ModelAdmin):
     model = Course
     list_display = ('user', 'department', "specialization")  # optional
 
+    def get_queryset(self, request):
+            qs = super().get_queryset(request)
+            # Agar superuser hai to sab dikhayen, warna sirf usi ka record
+            if request.user.is_superuser:
+                return qs
+            return qs.filter(user=request.user)
+    
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user":
             try:
                 teacher_group = Group.objects.get(name="Teacher")
-                kwargs["queryset"] = User.objects.filter(groups=teacher_group)
+                kwargs["queryset"] = User.objects.filter(username = request.user)
             except Group.DoesNotExist:
                 kwargs["queryset"] = User.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -148,11 +157,11 @@ class AssignmentSubmitAdmin(admin.ModelAdmin):
         
         super().save_model(request, obj, form, change)
     
-@admin.register(Assignmentgrade)
-class AssignmentgradeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'assigment_submit', 'marks', 'due_date')
-    search_fields = ('marks',)
-    list_filter = ('due_date',)
+# @admin.register(Assignmentgrade)
+# class AssignmentgradeAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'assigment_submit', 'marks', 'due_date')
+#     search_fields = ('marks',)
+#     list_filter = ('due_date',)
     
 
 @admin.register(StudentProfile)
@@ -163,12 +172,17 @@ class StudentAdmin(admin.ModelAdmin):
     def get_courses(self, obj):
         return ", ".join([course.course_name for course in obj.courses.all()])
     get_courses.short_description = 'Courses'  # Column header name
-
+    def get_queryset(self, request):
+            qs = super().get_queryset(request)
+            # Agar superuser hai to sab dikhayen, warna sirf usi ka record
+            if request.user.is_superuser:
+                return qs
+            return qs.filter(user=request.user)
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user":
             try:
                 teacher_group = Group.objects.get(name="Student")
-                kwargs["queryset"] = User.objects.filter(groups=teacher_group)
+                kwargs["queryset"] = User.objects.filter(username = request.user)
             except Group.DoesNotExist:
                 kwargs["queryset"] = User.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -231,6 +245,13 @@ class StudentCourseScheduleAdmin(admin.ModelAdmin):
                 # Agar user student hai to sirf apna hi record dekhe
                 kwargs["queryset"] = User.objects.filter(pk=request.user.pk)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display = ('student', 'course', 'enrollment_date')
+    list_filter = ('enrollment_date', 'course')
+    search_fields = ('student__email', 'course__course_name')
+
 
 admin.site.site_header = 'Student Management System Admin'
 admin.site.site_title = 'Student Management System Admin Portal'
